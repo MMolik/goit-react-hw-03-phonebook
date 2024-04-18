@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid'; // libka do generowania kluczy
+import { nanoid } from 'nanoid';
 import css from './App.module.css';
 import Form from './Form/Form';
 import { Contacts } from './Contacts/contacs';
 import { Filter } from './Filter/Filter';
 
-//dane podane w zadaniu
 export class App extends Component {
   state = {
-    contacts: [
-      { id: nanoid(), name: 'Rosie Simpson', number: '459-12-56' },
-      { id: nanoid(), name: 'Hermione Kline', number: '443-89-12' },
-      { id: nanoid(), name: 'Eden Clements', number: '645-17-79' },
-      { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    // Wczytanie kontaktów z lokalnego magazynu przy załadowaniu aplikacji
+    const storedContacts = JSON.parse(localStorage.getItem('contacts')) || [];
+    this.setState({ contacts: storedContacts });
+  }
 
   // Obsługa zmiany danych wejściowych
   onChangeInput = event => {
@@ -32,32 +32,30 @@ export class App extends Component {
     ) {
       alert(`${name} is already in contacts`);
     } else {
-      this.setState(oldState => {
-        const list = [...oldState.contacts];
-        list.push({
-          id: nanoid(),
-          name: name,
-          number: number,
-        });
-        return { contacts: list };
+      const newContact = { id: nanoid(), name: name, number: number };
+      const updatedContacts = [...this.state.contacts, newContact];
+      this.setState({ contacts: updatedContacts }, () => {
+        // Zapisanie kontaktów w lokalnym magazynie po dodaniu nowego kontaktu
+        localStorage.setItem('contacts', JSON.stringify(updatedContacts));
       });
     }
+  };
+
+  // Usuwanie kontaktu
+  deleteContact = id => {
+    const filteredContacts = this.state.contacts.filter(contact => contact.id !== id);
+    this.setState({ contacts: filteredContacts }, () => {
+      // Zapisanie kontaktów w lokalnym magazynie po usunięciu kontaktu
+      localStorage.setItem('contacts', JSON.stringify(filteredContacts));
+    });
   };
 
   // Filtracja kontaktów
   filterContacts = () => {
     const { contacts, filter } = this.state;
-    const filteredContacts = contacts.filter(contact =>
+    return contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
-    return filteredContacts;
-  };
-
-  // Usuwanie kontaktu
-  deleteContact = id => {
-    const { contacts } = this.state;
-    const filtered = contacts.filter(item => item.id !== id);
-    this.setState({ contacts: filtered });
   };
 
   render() {
