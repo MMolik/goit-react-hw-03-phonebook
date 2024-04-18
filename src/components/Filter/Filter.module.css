@@ -1,0 +1,16 @@
+.newContacts {
+  display: block;
+  margin: 40px auto;
+  padding: 10px;
+  width: 50%;
+  height: 25px;
+  border: 2px solid;
+  border-radius: 4px;
+  font-size: 30px;
+}
+.text {
+  display: block;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+}

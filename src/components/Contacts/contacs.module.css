@@ -1,0 +1,16 @@
+.contacts {
+  font-size: 40px;
+  padding: 20px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+.btn {
+  background-color: rgba(255, 0, 0, 0.328);
+  width: 150px;
+  font-size: 40px;
+}
